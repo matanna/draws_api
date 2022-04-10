@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -21,12 +22,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\NotBlank(null, message: "Vous devez indiquer votre email")]
+    #[Assert\Length(min: 5, max: 250, minMessage: 'Votre email doit contenir au moins 5 caractères', maxMessage: 'Votre email ne peut pas dépasser 250 caractère')]
+    #[Assert\Email(message: "Votre email n'est pas valide")]
     private $email;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
+    // Décommenter les validations en prod
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank(null, message: "Vous devez indiquer votre mot de passe")]
+    //#[Assert\Regex(pattern: "#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)#", message: "Votre mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spéciale.")]
+    //#[Assert\Length(min: 8, minMessage: "Votre mot de passe doit contenir au moins 8 caractères.")]
     private $password;
 
     #[ORM\OneToMany(mappedBy: 'userComment', targetEntity: Comment::class)]

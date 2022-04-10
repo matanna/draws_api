@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DrawRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,15 +19,19 @@ class Draw
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le titre est trop court", maxMessage: "Le titre est trop long")]
     private $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private $description;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Assert\DateTime]
     private $createdAt;
 
     #[ORM\Column(type: 'integer', nullable: true)]
+    #[Assert\Positive]
     private $likes;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'draws')]
@@ -36,6 +41,7 @@ class Draw
     private $comments;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Url]
     private $path;
 
     public function __construct()

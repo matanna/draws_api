@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
@@ -19,6 +20,7 @@ class Comment
     private $comment;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Assert\DateTime]
     private $createdAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
